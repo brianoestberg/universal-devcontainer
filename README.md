@@ -23,11 +23,11 @@ A highly optimized, reusable development container that works across all project
 ### Install in Existing Project
 
 ```bash
-# Quick install (replace YOUR_USERNAME with your GitHub username)
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/universal-devcontainer/main/install.sh | bash
+# Quick install (replace brianoestberg with your GitHub username)
+curl -sSL https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh | bash
 
 # Or clone manually
-git clone https://github.com/YOUR_USERNAME/universal-devcontainer.git
+git clone https://github.com/brianoestberg/universal-devcontainer.git
 cp -r universal-devcontainer/.devcontainer .
 rm -rf universal-devcontainer
 ```
@@ -61,7 +61,7 @@ The container automatically detects and configures:
 
 ```bash
 # Install in new project
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/universal-devcontainer/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh | bash
 
 # Run setup wizard
 ./.devcontainer/scripts/setup-wizard.sh

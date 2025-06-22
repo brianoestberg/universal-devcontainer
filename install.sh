@@ -16,8 +16,8 @@ if [[ -d ".devcontainer" ]]; then
     fi
 fi
 
-# Download latest release (update YOUR_USERNAME to your GitHub username)
-REPO="${GITHUB_USER:-YOUR_USERNAME}/universal-devcontainer"
+# Download latest release (update brianoestberg to your GitHub username)
+REPO="${GITHUB_USER:-brianoestberg}/universal-devcontainer"
 LATEST_URL="https://api.github.com/repos/$REPO/releases/latest"
 DOWNLOAD_URL=$(curl -s $LATEST_URL | grep "tarball_url" | cut -d '"' -f 4)
 
