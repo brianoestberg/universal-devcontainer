@@ -40,6 +40,7 @@ rm -rf universal-devcontainer
 
 ## Documentation
 
+- [Windows Setup Guide](WINDOWS-SETUP.md) - Step-by-step Windows installation
 - [Configuration Guide](.devcontainer/README.md)
 - [Migration Guide](.devcontainer/MIGRATION.md)
 - [Sharing Guide](.devcontainer/SHARING.md)
