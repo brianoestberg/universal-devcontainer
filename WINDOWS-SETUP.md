@@ -4,30 +4,54 @@ This guide provides step-by-step instructions for setting up the Universal Dev C
 
 ## 🚀 Quick Start (TL;DR)
 
-1. **Run PowerShell as Administrator** and execute:
+### Prerequisites (One-time setup)
+1. **Install WSL2** - Run PowerShell as Administrator:
    ```powershell
-   # One-time setup
    wsl --install
-   # Restart when prompted
+   # Restart computer when prompted
    ```
 
 2. **Install required software**:
    - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (use WSL2 backend)
    - [VS Code](https://code.visualstudio.com/) + Dev Containers extension
 
-3. **In your project folder**:
+### Create Your Project (Recommended: WSL filesystem)
+3. **Open WSL** from PowerShell:
    ```powershell
-   # Download and run our Windows installer
-   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install-windows.ps1" -OutFile install-windows.ps1
-   .\install-windows.ps1
+   wsl
+   ```
+   
+4. **In WSL/Linux** (you'll see your prompt change), create project:
+   ```bash
+   # Now you're in Linux - create project in your home directory
+   cd ~
+   mkdir my-project
+   cd my-project
+   
+   # Install dev container
+   curl -sSL https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh | bash
    
    # Open in VS Code
    code .
    ```
 
-4. **Click "Reopen in Container"** when VS Code prompts you.
+5. **In VS Code**: Click "Reopen in Container" when prompted.
 
 That's it! For detailed instructions, continue reading below.
+
+## Understanding Windows vs WSL
+
+### Key Concepts
+- **PowerShell**: Windows command line (shows `PS C:\>`)
+- **WSL**: Linux running inside Windows (shows `username@computer:~$`)
+- **Where to run commands**: 
+  - PowerShell commands start with `PS C:\>`
+  - WSL/Linux commands start with `$`
+- **File locations**:
+  - Windows: `C:\Projects\my-app`
+  - WSL: `/home/username/my-app` (or `~/my-app`)
+  - Access WSL files from Windows: `\\wsl$\Ubuntu\home\username\my-app`
+  - Access Windows files from WSL: `/mnt/c/Projects/my-app`
 
 ## Prerequisites
 
@@ -101,58 +125,135 @@ That's it! For detailed instructions, continue reading below.
 
 ## Setting Up Your First Project
 
-### Option 1: New Project
+### Option 1: WSL Filesystem (Recommended - Better Performance)
 
-1. **Create a new folder**:
+1. **Open PowerShell** and start WSL:
    ```powershell
+   # In PowerShell - this opens WSL/Linux
+   wsl
+   ```
+   
+   Your prompt will change from `PS C:\>` to something like `username@computer:~$`
+
+2. **Create project in Linux home directory**:
+   ```bash
+   # You are now in WSL/Linux - notice the $ prompt
+   cd ~                    # Go to your Linux home directory
+   mkdir my-new-app       # Create project folder
+   cd my-new-app          # Enter the folder
+   pwd                    # Shows: /home/yourusername/my-new-app
+   ```
+
+3. **Install the Universal Dev Container**:
+   ```bash
+   # Still in WSL/Linux
+   curl -sSL https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh | bash
+   ```
+
+4. **Open in VS Code**:
+   ```bash
+   # Still in WSL/Linux
+   code .
+   ```
+   VS Code will open on Windows, connected to your WSL folder
+
+5. **Reopen in Container**:
+   - VS Code will show: "Folder contains a Dev Container configuration"
+   - Click "Reopen in Container"
+   - First build: 2-3 minutes
+
+### Option 2: Windows Filesystem (Simpler but Slower)
+
+1. **In PowerShell** (stay in Windows):
+   ```powershell
+   # In PowerShell - notice the PS prompt
    mkdir C:\Projects\my-new-app
    cd C:\Projects\my-new-app
    ```
 
-2. **Download the Universal Dev Container**:
+2. **Run the Windows installer**:
    ```powershell
-   # In PowerShell
-   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh" -OutFile install.sh
+   # Download installer
+   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install-windows.ps1" -OutFile install-windows.ps1
    
-   # Run in WSL
-   wsl bash install.sh
+   # Run it
+   .\install-windows.ps1
    ```
 
 3. **Open in VS Code**:
    ```powershell
+   # Still in PowerShell
    code .
    ```
 
-4. **Reopen in Container**:
-   - VS Code will detect the `.devcontainer` folder
-   - Click "Reopen in Container" in the notification
-   - Or press `F1` → type "Reopen in Container"
+4. **Reopen in Container** (same as Option 1)
 
-### Option 2: Existing Project
+### Option 3: Existing Project
 
-1. **Open your project in VS Code**:
+#### For WSL Project:
+1. **Open WSL and navigate to your project**:
    ```powershell
+   # In PowerShell
+   wsl
+   ```
+   ```bash
+   # Now in WSL/Linux
+   cd ~/your-existing-project
+   code .
+   ```
+
+#### For Windows Project:
+1. **Open your project**:
+   ```powershell
+   # In PowerShell
    cd C:\Projects\your-existing-project
    code .
    ```
 
-2. **Open Terminal in VS Code**:
-   - Press `` Ctrl+` `` to open terminal
-   - Click the dropdown arrow → "Ubuntu (WSL)"
+2. **In VS Code Terminal** (`` Ctrl+` ``):
+   - Click dropdown → "Ubuntu (WSL)" or "Git Bash"
+   - You need a Linux terminal for the curl command
 
 3. **Install Universal Dev Container**:
    ```bash
+   # In the Linux terminal within VS Code
    curl -sSL https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh | bash
    ```
 
-4. **Run Setup Wizard**:
-   ```bash
-   ./.devcontainer/scripts/setup-wizard.sh
-   ```
-
-5. **Reopen in Container**:
+4. **Reopen in Container**:
    - Press `F1` → type "Reopen in Container"
-   - Wait for container to build (first time takes 2-3 minutes)
+   - Or click the notification
+
+## Understanding Where You Are
+
+### Visual Indicators
+
+**PowerShell (Windows)**:
+```
+PS C:\Users\YourName>
+```
+
+**WSL/Linux**:
+```
+yourname@computer:~$
+```
+
+**Inside Dev Container**:
+```
+developer@a1b2c3d4:/workspace$
+```
+
+### Quick Check Commands
+```bash
+# Where am I?
+pwd                    # Shows current directory
+
+# Windows or Linux?
+uname                  # Linux shows "Linux", Windows won't recognize
+
+# Inside container?
+echo $DEVCONTAINER     # Shows "true" if in container
+```
 
 ## First Time Setup
 
@@ -285,24 +386,39 @@ When the container starts for the first time:
 
 ## Quick Reference Card
 
+### First Time Setup (Run Once)
 ```powershell
-# First time setup (PowerShell)
+# In PowerShell as Administrator
 wsl --install
-# Restart computer
-# Install Docker Desktop
-# Install VS Code + Extensions
+# Restart computer when prompted
+```
+Then install:
+- [Docker Desktop](https://docker.com/products/docker-desktop/)
+- [VS Code](https://code.visualstudio.com/)
 
-# New project (PowerShell)
-mkdir C:\Projects\my-app
-cd C:\Projects\my-app
-wsl bash -c "curl -sSL https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh | bash"
-code .
-# Click "Reopen in Container"
+### Daily Workflow - New Project (Recommended)
+```powershell
+# Step 1: In PowerShell
+wsl                             # Opens Linux
 
-# Daily workflow
-code C:\Projects\my-app  # Open VS Code
-# F1 → "Reopen in Container"
-# Start coding!
+# Step 2: In WSL/Linux (notice prompt change to $)
+cd ~                           # Go to Linux home
+mkdir my-project               # Create project
+cd my-project                  # Enter project
+curl -sSL https://raw.githubusercontent.com/brianoestberg/universal-devcontainer/main/install.sh | bash
+code .                         # Opens VS Code
+
+# Step 3: In VS Code
+# Click "Reopen in Container" when prompted
+```
+
+### Daily Workflow - Existing Project
+```powershell
+# In PowerShell
+wsl                            # Opens Linux
+cd ~/my-project                # Go to your project
+code .                         # Opens VS Code
+# VS Code reopens in container automatically
 ```
 
 ---
