@@ -5,6 +5,16 @@ All notable changes to the Universal Dev Container will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2024-01-21
+
+### Changed
+- Made Claude Code and GitHub Copilot optional extensions (moved from core to optional)
+- Added proper attribution for third-party tools in README
+- Clarified licensing for third-party components
+
+### Added
+- Clear documentation about subscription requirements for AI coding assistants
+
 ## [1.0.0] - 2024-01-21
 
 ### Added

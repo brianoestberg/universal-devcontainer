@@ -1,7 +1,7 @@
 {
   "name": "Universal Dev Container",
   "build": {
-    "dockerfile": "Dockerfile.universal",
+    "dockerfile": "Dockerfile",
     "args": {
       "TIMEZONE": "${localEnv:TZ:UTC}",
       "LOCALE": "${localEnv:LANG:en_US.UTF-8}",
@@ -23,7 +23,7 @@
     "vscode": {
       // Core extensions only - project-specific ones installed dynamically
       "extensions": [
-        "anthropic.claude-code"
+        // Extensions are managed by scripts/install-extensions.sh
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",

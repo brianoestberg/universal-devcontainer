@@ -146,7 +146,6 @@ main() {
     # Install core extensions
     log "Installing core extensions..."
     core_extensions=(
-        "anthropic.claude-code"
         "ms-vsliveshare.vsliveshare"
         "mhutchie.git-graph"
         "eamodio.gitlens"
@@ -186,6 +185,7 @@ main() {
     if [[ -n "${INSTALL_OPTIONAL_EXTENSIONS:-}" ]]; then
         log "Installing optional extensions..."
         optional_extensions=(
+            "anthropic.claude-code"
             "github.copilot"
             "github.copilot-chat"
             "ms-vscode.remote-repositories"

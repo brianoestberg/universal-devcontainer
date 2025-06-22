@@ -146,8 +146,8 @@ configure_features() {
     
     # Optional extensions
     echo -e "\n${CYAN}Optional VS Code Extensions:${NC}"
-    echo "1) GitHub Copilot"
-    echo "2) GitLens"
+    echo "1) Claude Code (AI assistant - requires subscription)"
+    echo "2) GitHub Copilot (AI pair programmer - requires subscription)"
     echo "3) Remote Repositories"
     echo "4) IntelliCode"
     echo "5) Spell Checker"
@@ -163,8 +163,8 @@ configure_features() {
         IFS=',' read -ra choices <<< "$extension_choices"
         for choice in "${choices[@]}"; do
             case $choice in
-                1) optional_extensions="${optional_extensions}github.copilot,";;
-                2) optional_extensions="${optional_extensions}eamodio.gitlens,";;
+                1) optional_extensions="${optional_extensions}anthropic.claude-code,";;
+                2) optional_extensions="${optional_extensions}github.copilot,";;
                 3) optional_extensions="${optional_extensions}ms-vscode.remote-repositories,";;
                 4) optional_extensions="${optional_extensions}visualstudioexptteam.vscodeintellicode,";;
                 5) optional_extensions="${optional_extensions}streetsidesoftware.code-spell-checker,";;

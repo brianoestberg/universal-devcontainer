@@ -14,7 +14,6 @@ user:
 extensions:
   # Always installed
   core:
-    - anthropic.claude-code
     - ms-vsliveshare.vsliveshare
     - mhutchie.git-graph
     - eamodio.gitlens
@@ -41,7 +40,8 @@ extensions:
     
   # Optional extensions (user can enable)
   optional:
-    - github.copilot
+    - anthropic.claude-code  # AI coding assistant (requires subscription)
+    - github.copilot         # AI pair programmer (requires subscription)
     - github.copilot-chat
     - ms-vscode.remote-repositories
     - visualstudioexptteam.vscodeintellicode
