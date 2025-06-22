@@ -16,15 +16,10 @@ if [[ -d ".devcontainer" ]]; then
     fi
 fi
 
-# Download latest release (update brianoestberg to your GitHub username)
+# Download from main branch (contains latest fixes)
 REPO="${GITHUB_USER:-brianoestberg}/universal-devcontainer"
-LATEST_URL="https://api.github.com/repos/$REPO/releases/latest"
-DOWNLOAD_URL=$(curl -s $LATEST_URL | grep "tarball_url" | cut -d '"' -f 4)
-
-if [[ -z "$DOWNLOAD_URL" ]]; then
-    echo "No releases found, using main branch..."
-    DOWNLOAD_URL="https://github.com/$REPO/archive/main.tar.gz"
-fi
+DOWNLOAD_URL="https://github.com/$REPO/archive/main.tar.gz"
+echo "Downloading from main branch..."
 
 # Download and extract
 echo "Downloading..."
