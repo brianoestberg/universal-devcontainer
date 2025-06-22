@@ -5,7 +5,7 @@
     "args": {
       "TIMEZONE": "${localEnv:TZ:UTC}",
       "LOCALE": "${localEnv:LANG:en_US.UTF-8}",
-      "USERNAME": "${localEnv:USER:developer}"
+      "USERNAME": "developer"
     },
     "options": [
       "--progress=plain"
@@ -39,13 +39,13 @@
     }
   },
 
-  "remoteUser": "${localEnv:USER:developer}",
+  "remoteUser": "developer",
 
   "mounts": [
-    "source=devcontainer-history-${localEnv:USER:developer},target=/commandhistory,type=volume",
-    "source=devcontainer-vscode-${localEnv:USER:developer},target=/home/${localEnv:USER:developer}/.vscode-server,type=volume",
-    "source=devcontainer-config-${localEnv:USER:developer},target=/home/${localEnv:USER:developer}/.config/devcontainer,type=volume",
-    "source=devcontainer-extensions,target=/home/${localEnv:USER:developer}/.vscode-server/extensions,type=volume"
+    "source=devcontainer-history,target=/commandhistory,type=volume",
+    "source=devcontainer-vscode,target=/home/developer/.vscode-server,type=volume",
+    "source=devcontainer-config,target=/home/developer/.config/devcontainer,type=volume",
+    "source=devcontainer-extensions,target=/home/developer/.vscode-server/extensions,type=volume"
   ],
 
   "remoteEnv": {
@@ -61,9 +61,9 @@
   "workspaceFolder": "/workspace",
 
   // Lifecycle scripts
-  "onCreateCommand": "/home/${localEnv:USER:developer}/.devcontainer/scripts/dev-setup.sh --non-interactive",
-  "postStartCommand": "nohup /home/${localEnv:USER:developer}/.devcontainer/scripts/update-tools.sh --background > /tmp/update.log 2>&1 &",
-  "postAttachCommand": "/home/${localEnv:USER:developer}/.devcontainer/scripts/install-extensions.sh",
+  "onCreateCommand": "/usr/local/bin/devcontainer-scripts/dev-setup.sh --non-interactive || true",
+  "postStartCommand": "nohup /usr/local/bin/devcontainer-scripts/update-tools.sh --background > /tmp/update.log 2>&1 &",
+  "postAttachCommand": "/usr/local/bin/devcontainer-scripts/install-extensions.sh || true",
   
   "containerEnv": {
     "DOCKER_BUILDKIT": "1",
