@@ -60,10 +60,10 @@
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
 
-  // Lifecycle scripts
-  "onCreateCommand": "/usr/local/bin/devcontainer-scripts/dev-setup.sh --non-interactive || true",
-  "postStartCommand": "nohup /usr/local/bin/devcontainer-scripts/update-tools.sh --background > /tmp/update.log 2>&1 &",
-  "postAttachCommand": "/usr/local/bin/devcontainer-scripts/install-extensions.sh || true",
+  // Lifecycle scripts (disabled for now to avoid errors)
+  // "onCreateCommand": "/usr/local/bin/devcontainer-scripts/dev-setup.sh --non-interactive || true",
+  // "postStartCommand": "echo 'Container started successfully!'",
+  // "postAttachCommand": "/usr/local/bin/devcontainer-scripts/install-extensions.sh || true",
   
   "containerEnv": {
     "DOCKER_BUILDKIT": "1",

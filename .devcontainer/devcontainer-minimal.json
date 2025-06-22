@@ -1,0 +1,14 @@
+{
+  "name": "Universal Dev Container (Minimal)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "TIMEZONE": "UTC",
+      "LOCALE": "en_US.UTF-8",
+      "USERNAME": "developer"
+    }
+  },
+  "remoteUser": "developer",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace"
+}

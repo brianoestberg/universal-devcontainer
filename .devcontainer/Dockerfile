@@ -146,21 +146,22 @@ RUN mkdir -p ~/.vscode-server/extensions ~/.vscode-server/bin
 # Final stage for runtime
 FROM base AS runtime
 
-# Copy scripts to container
+# Copy scripts to container (if they exist)
 COPY scripts/ /usr/local/bin/devcontainer-scripts/
 
-# Make scripts executable
-RUN chmod +x /usr/local/bin/devcontainer-scripts/*.sh && \
-    chown -R $USERNAME:$USERNAME /usr/local/bin/devcontainer-scripts/
-
-# Create convenience symlinks
-RUN ln -s /usr/local/bin/devcontainer-scripts/install-extensions.sh /usr/local/bin/install-extensions && \
-    ln -s /usr/local/bin/devcontainer-scripts/update-tools.sh /usr/local/bin/dev-update && \
-    ln -s /usr/local/bin/devcontainer-scripts/security-scan.sh /usr/local/bin/dev-scan && \
-    ln -s /usr/local/bin/devcontainer-scripts/dev-setup.sh /usr/local/bin/dev-setup
+# Make scripts executable and create symlinks
+RUN if [ -d /usr/local/bin/devcontainer-scripts ]; then \
+        chmod +x /usr/local/bin/devcontainer-scripts/*.sh && \
+        chown -R $USERNAME:$USERNAME /usr/local/bin/devcontainer-scripts/ && \
+        ln -sf /usr/local/bin/devcontainer-scripts/install-extensions.sh /usr/local/bin/install-extensions && \
+        ln -sf /usr/local/bin/devcontainer-scripts/update-tools.sh /usr/local/bin/dev-update && \
+        ln -sf /usr/local/bin/devcontainer-scripts/security-scan.sh /usr/local/bin/dev-scan && \
+        ln -sf /usr/local/bin/devcontainer-scripts/dev-setup.sh /usr/local/bin/dev-setup; \
+    fi
 
 # Set up sudo for scripts
-RUN echo "$USERNAME ALL=(root) NOPASSWD: /usr/local/bin/devcontainer-scripts/*" >> /etc/sudoers.d/$USERNAME
+RUN echo "$USERNAME ALL=(root) NOPASSWD: ALL" >> /etc/sudoers.d/$USERNAME && \
+    chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
