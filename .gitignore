@@ -1,0 +1,20 @@
+# Dev Container
+.devcontainer/.backup/
+.devcontainer/*.log
+.devcontainer/config.yaml.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+*.cache

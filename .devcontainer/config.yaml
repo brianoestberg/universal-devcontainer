@@ -1,0 +1,136 @@
+# Dev Container Configuration
+# This file allows you to customize your development environment
+
+# User settings
+user:
+  timezone: ${TIMEZONE:-UTC}
+  locale: ${LOCALE:-en_US.UTF-8}
+  username: ${USERNAME:-developer}
+  dotfiles:
+    repository: ${DOTFILES_REPO:-}
+    install_command: ${DOTFILES_INSTALL_CMD:-}
+
+# VS Code extensions
+extensions:
+  # Always installed
+  core:
+    - anthropic.claude-code
+    - ms-vsliveshare.vsliveshare
+    - mhutchie.git-graph
+    - eamodio.gitlens
+    
+  # Language-specific (install based on detected project type)
+  javascript:
+    - dbaeumer.vscode-eslint
+    - esbenp.prettier-vscode
+    - dsznajder.es7-react-js-snippets
+    
+  python:
+    - ms-python.python
+    - ms-python.vscode-pylance
+    - ms-python.black-formatter
+    
+  go:
+    - golang.go
+    
+  rust:
+    - rust-lang.rust-analyzer
+    
+  docker:
+    - ms-azuretools.vscode-docker
+    
+  # Optional extensions (user can enable)
+  optional:
+    - github.copilot
+    - github.copilot-chat
+    - ms-vscode.remote-repositories
+    - visualstudioexptteam.vscodeintellicode
+    - streetsidesoftware.code-spell-checker
+
+# Tool versions (for auto-updates)
+tools:
+  gh:
+    version: latest
+    check_command: gh --version
+    install_command: |
+      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+      sudo apt update && sudo apt install gh -y
+      
+  delta:
+    version: 0.18.2
+    check_command: delta --version
+    update_check_url: https://api.github.com/repos/dandavison/delta/releases/latest
+    
+  fzf:
+    version: latest
+    check_command: fzf --version
+    
+  ripgrep:
+    version: latest
+    check_command: rg --version
+
+# Features to enable
+features:
+  # Auto-updates
+  auto_update:
+    enabled: ${ENABLE_AUTO_UPDATE:-true}
+    check_interval_hours: 24
+    
+  # Telemetry (for improving the container)
+  telemetry:
+    enabled: ${ENABLE_TELEMETRY:-false}
+    
+  # Git hooks
+  git_hooks:
+    pre_commit: ${ENABLE_PRE_COMMIT:-false}
+    commit_lint: ${ENABLE_COMMIT_LINT:-false}
+
+# Mount points
+mounts:
+  persistent:
+    - name: history
+      source: devcontainer-history-${USERNAME}
+      target: /commandhistory
+    - name: vscode-server
+      source: devcontainer-vscode-server-${USERNAME}
+      target: /home/${USERNAME}/.vscode-server
+    - name: config
+      source: devcontainer-config-${USERNAME}
+      target: /home/${USERNAME}/.config/devcontainer
+      
+# Environment variables
+environment:
+  # Default environment
+  default:
+    EDITOR: vim
+    PAGER: less
+    TERM: xterm-256color
+    
+  # Development
+  development:
+    PYTHONDONTWRITEBYTECODE: "1"
+    PIP_NO_CACHE_DIR: "1"
+    NODE_ENV: development
+    
+# Post-create actions
+post_create:
+  # Commands to run after container creation
+  commands:
+    - name: "Update package manager"
+      command: "sudo apt-get update"
+      condition: "[ ! -f /var/cache/apt/pkgcache.bin ] || [ $(find /var/cache/apt/pkgcache.bin -mtime +7 -print) ]"
+      
+    - name: "Install project dependencies"
+      command: "/home/${USERNAME}/.devcontainer/scripts/install-dependencies.sh"
+      condition: "[ -f package.json ] || [ -f requirements.txt ] || [ -f go.mod ] || [ -f Cargo.toml ]"
+
+# Health checks
+health_checks:
+  - name: "Git available"
+    command: "command -v git"
+  - name: "Shell available"
+    command: "command -v ${SHELL:-zsh}"
+  - name: "Network connectivity"
+    command: "curl -s -o /dev/null -w '%{http_code}' https://github.com"
+    expected: "200"

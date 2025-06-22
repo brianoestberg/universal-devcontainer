@@ -1,0 +1,95 @@
+{
+  "name": "Universal Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile.universal",
+    "args": {
+      "TIMEZONE": "${localEnv:TZ:UTC}",
+      "LOCALE": "${localEnv:LANG:en_US.UTF-8}",
+      "USERNAME": "${localEnv:USER:developer}"
+    },
+    "options": [
+      "--progress=plain"
+    ]
+  },
+  
+  "runArgs": [
+    "--init",
+    "--cap-add=SYS_PTRACE",
+    "--security-opt", "seccomp=unconfined",
+    "--shm-size=2gb"
+  ],
+
+  "customizations": {
+    "vscode": {
+      // Core extensions only - project-specific ones installed dynamically
+      "extensions": [
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": { "path": "bash", "icon": "terminal-bash" },
+          "zsh":  { "path": "zsh"  }
+        },
+        "editor.formatOnSave": false,  // Let projects decide
+        "extensions.autoCheckUpdates": false,
+        "extensions.autoUpdate": false,
+        "telemetry.telemetryLevel": "off"
+      }
+    }
+  },
+
+  "remoteUser": "${localEnv:USER:developer}",
+
+  "mounts": [
+    "source=devcontainer-history-${localEnv:USER:developer},target=/commandhistory,type=volume",
+    "source=devcontainer-vscode-${localEnv:USER:developer},target=/home/${localEnv:USER:developer}/.vscode-server,type=volume",
+    "source=devcontainer-config-${localEnv:USER:developer},target=/home/${localEnv:USER:developer}/.config/devcontainer,type=volume",
+    "source=devcontainer-extensions,target=/home/${localEnv:USER:developer}/.vscode-server/extensions,type=volume"
+  ],
+
+  "remoteEnv": {
+    "DEVCONTAINER": "true",
+    "DEVCONTAINER_TYPE": "universal",
+    "LANG": "${localEnv:LANG:en_US.UTF-8}",
+    "LC_ALL": "${localEnv:LANG:en_US.UTF-8}",
+    "EDITOR": "vim",
+    "HISTFILE": "/commandhistory/.zsh_history"
+  },
+
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+
+  // Lifecycle scripts
+  "onCreateCommand": "/home/${localEnv:USER:developer}/.devcontainer/scripts/dev-setup.sh --non-interactive",
+  "postStartCommand": "nohup /home/${localEnv:USER:developer}/.devcontainer/scripts/update-tools.sh --background > /tmp/update.log 2>&1 &",
+  "postAttachCommand": "/home/${localEnv:USER:developer}/.devcontainer/scripts/install-extensions.sh",
+  
+  "containerEnv": {
+    "DOCKER_BUILDKIT": "1",
+    "COMPOSE_DOCKER_CLI_BUILD": "1"
+  },
+  
+  // Features for additional functionality (optional)
+  "features": {
+    // Uncomment to add Docker-in-Docker support
+    // "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    
+    // Uncomment to add specific language support
+    // "ghcr.io/devcontainers/features/node:1": {},
+    // "ghcr.io/devcontainers/features/python:1": {},
+    // "ghcr.io/devcontainers/features/go:1": {},
+    // "ghcr.io/devcontainers/features/rust:1": {}
+  },
+  
+  "shutdownAction": "stopContainer",
+  
+  // Port forwarding
+  "forwardPorts": [],
+  
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "uname -a",
+  
+  // Comment out to connect as root instead.
+  "updateRemoteUserUID": true
+}

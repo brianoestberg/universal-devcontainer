@@ -1,0 +1,38 @@
+name: Test Dev Container
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Dev Container
+      run: |
+        cd .devcontainer
+        docker build -f Dockerfile -t universal-devcontainer:test .
+    
+    - name: Test Container Startup
+      run: |
+        docker run --rm universal-devcontainer:test sh -c "
+          echo 'Testing basic commands...' &&
+          git --version &&
+          zsh --version &&
+          vim --version | head -1 &&
+          echo 'Container test passed!'
+        "
+    
+    - name: Test Scripts Exist
+      run: |
+        docker run --rm -v $PWD/.devcontainer:/test universal-devcontainer:test sh -c "
+          test -x /test/scripts/setup-wizard.sh &&
+          test -x /test/scripts/install-extensions.sh &&
+          test -x /test/scripts/update-tools.sh &&
+          echo 'All scripts are executable'
+        "
