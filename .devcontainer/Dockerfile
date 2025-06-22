@@ -15,7 +15,7 @@ ENV TZ=$TIMEZONE
 
 # Set locale
 ENV LANG=$LOCALE
-ENV LANGUAGE=${LOCALE%.*}:en
+ENV LANGUAGE=en_US:en
 ENV LC_ALL=$LOCALE
 
 # Install essential packages
